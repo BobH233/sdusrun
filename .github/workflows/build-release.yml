@@ -59,7 +59,12 @@ jobs:
 
           cd build
           ./build-release.sh -t ${{ matrix.target }} $compile_features $compile_compress
-
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.target }}
+          path: build/release/*
+          if-no-files-found: error
 
   build-unix:
     runs-on: ${{ matrix.os }}
