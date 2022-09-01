@@ -139,6 +139,6 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.target }}
+          name: x86_64-pc-windows-msvc
           path: build/release/*
           if-no-files-found: error
