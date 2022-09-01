@@ -1,11 +1,12 @@
 name: Build Releases
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - BobH233-patch-1
 
 env:
   CARGO_TERM_COLOR: always
-  AUTH_SERVER_IP: ${{ secrets.AUTH_SERVER_IP }}
+  AUTH_SERVER_IP: 10.0.0.55
 
 jobs:
   build-cross:
@@ -59,13 +60,6 @@ jobs:
           cd build
           ./build-release.sh -t ${{ matrix.target }} $compile_features $compile_compress
 
-      - name: Upload Github Assets
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: build/release/*
-          prerelease: ${{ contains(github.ref, '-') }}
 
   build-unix:
     runs-on: ${{ matrix.os }}
@@ -108,13 +102,6 @@ jobs:
         run: |
           ./build/build-host-release.sh -t ${{ matrix.target }}
 
-      - name: Upload Github Assets
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: build/release/*
-          prerelease: ${{ contains(github.ref, '-') }}
 
   build-windows:
     runs-on: windows-latest
@@ -135,11 +122,3 @@ jobs:
       - name: Build release
         run: |
           pwsh ./build/build-host-release.ps1
-
-      - name: Upload Github Assets
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: build/release/*
-          prerelease: ${{ contains(github.ref, '-') }}
